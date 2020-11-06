@@ -28,7 +28,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks.create');
     }
 
     /**
@@ -39,7 +39,8 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Task::create(['task' => $request->input('task')]);
+        return view('tasks.create', [ 'message' => '登録しました。' ]);
     }
 
     /**
@@ -61,7 +62,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return view('tasks.edit',[
+            'task' => $task
+        ]);
     }
 
     /**
@@ -73,7 +76,14 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+
+        $tasks = Task::all();
+        $task->task = $request->input('task');
+        $task->save();
+
+        return view('tasks.edit',[
+            'task' => $task,'message'=> '更新しました。'
+        ]);
     }
 
     /**
@@ -84,6 +94,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        
+        $tasks = Task::all();
+        return view('tasks.index', [ 'tasks' => $tasks, 'message' => '削除しました。' ]);
     }
 }
