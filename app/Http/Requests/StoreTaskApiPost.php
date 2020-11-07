@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreTaskPost extends FormRequest
+class StoreTaskApiPost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -43,4 +45,13 @@ class StoreTaskPost extends FormRequest
             'task.unique' => ':attributeは既に登録されています。',
         ];
     }
+
+    protected function failedValidation(Validator $validator) : void
+    {
+        $res = response()->json([
+            'errors' => $validator->errors(),
+        ], 422);
+        throw new HttpResponseException($res);
+    }
+
 }

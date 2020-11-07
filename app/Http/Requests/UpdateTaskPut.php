@@ -13,7 +13,7 @@ class UpdateTaskPut extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,24 @@ class UpdateTaskPut extends FormRequest
     public function rules()
     {
         return [
-            //
+            'task' => 'required|string|max:100:tasks',
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'task' => 'タスク',
+        ];
+    }
+
+    public function messages() {
+        return [
+            'task.required' => ':attributeは必須項目です。',
+            'task.string' => ':attributeは文字を入力してください。',
+            'task.max' => ':attributeは:max文字以内で入力してください。',
+            'task.unique' => ':attributeは既に登録されています。',
+        ];
+    }
+
 }
